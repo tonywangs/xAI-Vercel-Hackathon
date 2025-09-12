@@ -1,43 +1,52 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { UserRegistration, UserRegistrationResponse } from '@/types/api';
 
-// This is a placeholder API route for the backend team
-// Replace this with actual backend integration
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8000';
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     
-    // Extract form data
-    const userData: UserRegistration = {
-      phoneNumber: formData.get('phoneNumber') as string,
-      name: formData.get('name') as string,
-      medicalInfo: formData.get('medicalInfo') as string || undefined,
-      emergencyContact: formData.get('emergencyContact') as string || undefined,
+    // Extract form data and map to backend format
+    const registrationData = {
+      full_name: formData.get('name') as string,
+      phone_number: formData.get('phoneNumber') as string,
       age: formData.get('age') ? parseInt(formData.get('age') as string) : undefined,
-      idScan: formData.get('idScan') as File || undefined,
+      gender: undefined, // Not collected in current form
+      medical_information: formData.get('medicalInfo') as string || undefined,
+      emergency_contact: formData.get('emergencyContact') as string || undefined,
+      id_information: formData.get('idScan') ? 'ID document uploaded' : undefined, // Simplified for now
     };
 
-    // TODO: Replace with actual backend API call
-    // Example:
-    // const response = await fetch('YOUR_BACKEND_URL/api/users/register', {
-    //   method: 'POST',
-    //   body: formData,
-    // });
-    // const result = await response.json();
+    // Call backend registration API
+    const response = await fetch(`${BACKEND_URL}/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(registrationData),
+    });
 
-    // Simulate API response
-    const result: UserRegistrationResponse = {
-      success: true,
-      userId: 'user_' + Math.random().toString(36).substr(2, 9),
-      message: 'User registered successfully',
-    };
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Registration failed');
+    }
 
-    return NextResponse.json(result);
+    const result = await response.json();
+    
+    // Return in expected frontend format
+    return NextResponse.json({
+      success: result.success,
+      userId: result.user_id,
+      message: result.message,
+    });
+
   } catch (error) {
     console.error('Registration error:', error);
     return NextResponse.json(
-      { success: false, message: 'Registration failed' },
+      { 
+        success: false, 
+        message: error instanceof Error ? error.message : 'Registration failed' 
+      },
       { status: 500 }
     );
   }

@@ -5,6 +5,7 @@ from typing import Dict
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 from .models import AlertRequest, AlertResponse, UserRegistration, RegisteredUser, RegistrationResponse
 from .voice_alerts import VoiceAlertService
@@ -12,6 +13,15 @@ from .voice_alerts import VoiceAlertService
 load_dotenv()
 
 app = FastAPI(title="Aegis Event Alerting API", version="0.1.0")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],  # Frontend URLs
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 
 # In-memory user storage
 registered_users: Dict[str, RegisteredUser] = {}
@@ -99,7 +109,7 @@ async def register_user(registration: UserRegistration):
 @app.get("/users")
 async def list_users():
     """
-    List all registered users (for testing/admin purposes)
+    Get all registered users with full details for admin dashboard
     """
     return {
         "total_users": len(registered_users),
@@ -108,10 +118,16 @@ async def list_users():
                 "id": user.id,
                 "full_name": user.full_name,
                 "phone_number": user.phone_number,
+                "age": user.age,
+                "gender": user.gender,
+                "medical_information": user.medical_information,
+                "emergency_contact": user.emergency_contact,
+                "id_information": user.id_information,
                 "registered_at": user.registered_at.isoformat()
             }
             for user in registered_users.values()
-        ]
+        ],
+        "hardcoded_numbers": [n for n in HARDCODED_PHONE_NUMBERS if n]
     }
 
 

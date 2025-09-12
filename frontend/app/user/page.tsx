@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { User, Phone, Heart, FileText, Shield, CheckCircle, Sparkles, Zap, Star } from 'lucide-react';
+import { User, Phone, Heart, FileText, Shield, CheckCircle, Sparkles, Zap, Star, AlertTriangle } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -21,6 +21,7 @@ export default function UserRegistrationPage() {
   const [idScan, setIdScan] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [processingId, setProcessingId] = useState(false);
 
@@ -56,6 +57,7 @@ export default function UserRegistrationPage() {
       setProcessingId(false);
     }
   };
+  const [submitError, setSubmitError] = useState('');
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -91,6 +93,7 @@ export default function UserRegistrationPage() {
 
     setLoading(true);
     setSuccess(false);
+    setSubmitError('');
 
     try {
       // Create FormData for file upload
@@ -110,14 +113,16 @@ export default function UserRegistrationPage() {
         submitData.append('idScan', idScan);
       }
 
-      // TODO: Replace with actual API call
       const response = await fetch('/api/users/register', {
         method: 'POST',
         body: submitData,
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (response.ok && result.success) {
         setSuccess(true);
+        setSuccessMessage(result.message || 'Registration successful!');
         setFormData({
           phoneNumber: '',
           name: '',
@@ -128,11 +133,11 @@ export default function UserRegistrationPage() {
         });
         setIdScan(null);
       } else {
-        throw new Error('Failed to register user');
+        throw new Error(result.message || 'Failed to register user');
       }
     } catch (error) {
       console.error('Error registering user:', error);
-      // TODO: Add proper error handling
+      setSubmitError(error instanceof Error ? error.message : 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -144,12 +149,15 @@ export default function UserRegistrationPage() {
       [field]: value,
     }));
     
-    // Clear error when user starts typing
+    // Clear errors when user starts typing
     if (errors[field]) {
       setErrors(prev => ({
         ...prev,
         [field]: '',
       }));
+    }
+    if (submitError) {
+      setSubmitError('');
     }
   };
 
@@ -181,7 +189,7 @@ export default function UserRegistrationPage() {
             Registration Successful! ✨
           </h2>
           <p className="text-gray-600 mb-6">
-            You're now registered for event safety alerts. You'll receive important notifications via text or phone call when needed.
+            {successMessage || "You're now registered for event safety alerts. You'll receive important notifications via phone call when needed."}
           </p>
           <Button
             onClick={() => setSuccess(false)}
@@ -220,6 +228,20 @@ export default function UserRegistrationPage() {
 
         <Card className="rainbow-border">
           <form onSubmit={handleSubmit} className="space-y-6 mx-4 my-4">
+            {/* Error Display */}
+            {submitError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-red-800">Registration Error</p>
+                    <p className="text-sm text-red-700 mt-1">{submitError}</p>
+                  </div>
+                </div>
+              </div>
+            )}
             {/* Basic Information */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-gray-900 flex items-center">
