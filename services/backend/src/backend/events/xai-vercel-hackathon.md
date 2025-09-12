@@ -9,8 +9,8 @@
 ## Facilities & Navigation
 
 ### Bathrooms
-- **Location**: Front of building near the main entrance
-- **How to find**: Turn into the hallway by the drinks refrigerator
+- **Location**: Left of the entrance
+- **How to find**: When you enter the building, turn into the hallway that is before the drinks refrigerator.
 - **Available**: 24/7 during the event
 
 ### Floor Access
@@ -26,7 +26,7 @@
 - **Main Station**: 1st floor central area
 - **Drinks Refrigerator**: Near main entrance (landmark for bathroom directions)
 - **Meal Times**: 
-  - Dinner: 7:00 PM
+  - Dinner: 7:00 PM until gone
   - Snacks and drinks: Available 24/7
 
 ## Emergency Information
@@ -37,10 +37,46 @@
 - **Fire Assembly Point**: Parking lot, 100 feet from main entrance
 
 ### Emergency Contacts
-- **Event Staff**: Call or text any staff member wearing orange lanyards
-- **Security**: Extension 911 from any house phone
+
+#### xAI Security Team
+- **xAI Physical Security Manager**: Logan Beach - (903) 399-5358
+- **xAI Security Operations**: Jesse Rice - (708) 305-2140
+- **Allied Security Duty Phone**: (628) 233-6242
+
+#### Emergency Services
+- **Police & Fire**: Call 911
+- **Suspicious Activity**: (901) 660-9091 - Don't wait, call immediately
+- **San Francisco Tenderloin Police Station**: 301 Eddy Street - (415) 345-7300
+- **San Francisco Fire Station #7**: 2300 Folsom Street - (415) 558-3200
+- **San Francisco County Sheriff**: 425 7th Street - (415) 553-1430
+
+#### Medical Facilities
+- **Primary Hospital**: Zuckerberg San Francisco General Hospital & Trauma Center ER
+  - Address: 1001 Potrero Ave, San Francisco, CA 94110
+  - Phone: (628) 206-8000
+- **Urgent Care**: UCSF Health-GoHealth Urgent Care
+  - Address: 2288 Market St, San Francisco, CA 94114
+  - Phone: (415) 964-4855
+
+#### Event Staff
+- **Event Staff**: Call or text any staff member wearing orange lanyards, or talk to the event staff sitting at the desk in the inner most room of the first floor.
 - **Medical**: First aid station on 1st floor near registration
-- **Fire/Police**: Call 911
+
+### First Aid Supplies
+
+#### Cintas First Aid Center
+- **Location**: When you enter the building, turn left into the hallway
+- **Type**: Fully stocked cabinet for treating minor injuries and quick response
+- **Access**: Available 24/7 during the event
+
+#### Available Supplies
+- **Basic Wound Care**: Bandages, antiseptics, gauze, burn cream
+- **Eye Care**: Eye wash, lens wipes
+- **Protection**: Gloves, hand sanitizing wipes
+- **Temperature Control**: Cold packs
+- **Medications**: Over-the-counter meds
+- **Emergency Equipment**: AED (Automated External Defibrillator)
+- **Infection Control**: Bloodborne pathogens infection control kit
 
 ### Safety Guidelines
 - **Building Hours**: Participants have 24/7 access during event
