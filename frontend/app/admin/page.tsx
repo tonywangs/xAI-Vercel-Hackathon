@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { AlertTriangle, Phone, MessageSquare, Users, Send } from 'lucide-react';
+import { AlertTriangle, Phone, MessageSquare, Users, Send, Sparkles, Zap, Shield } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -126,35 +126,46 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen relative overflow-hidden py-8">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Aegis Admin Dashboard
-          </h1>
-          <p className="text-gray-600">
+          <div className="relative inline-block">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 floating">
+              Aegis Admin Dashboard
+            </h1>
+            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 rounded-lg blur opacity-30"></div>
+          </div>
+          <p className="text-xl text-white/90">
             Send alerts and manage event safety communications
           </p>
         </div>
 
         {success && (
-          <Card className="mb-6 border-success-200 bg-success-50">
+          <Card className="mb-6 rainbow-border pulse-glow">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-success-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
+                <div className="relative">
+                  <Shield className="h-6 w-6 text-green-600" />
+                  <Sparkles className="h-4 w-4 text-yellow-400 absolute -top-1 -right-1 animate-bounce" />
+                </div>
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-success-800">
-                  Alert sent successfully!
+                <p className="text-sm font-medium text-gray-800">
+                  Alert sent successfully! ✨
                 </p>
               </div>
             </div>
           </Card>
         )}
 
-        <Card>
+        <Card className="rainbow-border">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Alert Message */}
             <div>
@@ -286,30 +297,33 @@ export default function AdminPage() {
             )}
 
             {/* Alert Preview */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h3 className="text-sm font-medium text-gray-900 mb-3">Alert Preview</h3>
+            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-200">
+              <h3 className="text-sm font-medium text-gray-900 mb-4 flex items-center">
+                <Zap className="h-4 w-4 mr-2 text-purple-600" />
+                Alert Preview
+              </h3>
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0">
                   {getPriorityIcon(formData.priority)}
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      formData.priority === 'emergency' ? 'bg-danger-100 text-danger-800' :
-                      formData.priority === 'warning' ? 'bg-warning-100 text-warning-800' :
-                      'bg-primary-100 text-primary-800'
+                  <div className="flex items-center space-x-2 mb-2">
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                      formData.priority === 'emergency' ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white' :
+                      formData.priority === 'warning' ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white' :
+                      'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
                     }`}>
                       {formData.priority.toUpperCase()}
                     </span>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-gray-500 to-gray-600 text-white">
                       {getMethodIcon(formData.method)}
                       <span className="ml-1">{formData.method.toUpperCase()}</span>
                     </span>
                   </div>
-                  <p className="text-sm text-gray-700">
+                  <p className="text-sm text-gray-700 mb-2">
                     {formData.message || 'Your alert message will appear here...'}
                   </p>
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="text-xs text-gray-500">
                     Target: {formData.target.type.replace('_', ' ')} {formData.target.value && `- ${formData.target.value}`}
                   </p>
                 </div>
@@ -324,9 +338,20 @@ export default function AdminPage() {
                 size="lg"
                 loading={loading}
                 disabled={!formData.message.trim()}
+                className="pulse-glow"
               >
                 <Send className="h-4 w-4 mr-2" />
-                Send Alert
+                {formData.priority === 'emergency' ? (
+                  <>
+                    <Zap className="h-4 w-4 mr-2" />
+                    Send Emergency Alert
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Send Alert
+                  </>
+                )}
               </Button>
             </div>
           </form>

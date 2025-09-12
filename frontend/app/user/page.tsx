@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { User, Phone, Heart, FileText, Shield, CheckCircle } from 'lucide-react';
+import { User, Phone, Heart, FileText, Shield, CheckCircle, Sparkles, Zap, Star } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -119,13 +119,23 @@ export default function UserRegistrationPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <Card className="max-w-md w-full text-center">
+      <div className="min-h-screen relative overflow-hidden flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-green-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+        </div>
+
+        <Card className="max-w-md w-full text-center rainbow-border pulse-glow relative z-10">
           <div className="flex justify-center mb-4">
-            <CheckCircle className="h-16 w-16 text-success-600" />
+            <div className="relative">
+              <CheckCircle className="h-16 w-16 text-green-600" />
+              <Sparkles className="h-8 w-8 text-yellow-400 absolute -top-2 -right-2 animate-bounce" />
+            </div>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Registration Successful!
+            Registration Successful! ✨
           </h2>
           <p className="text-gray-600 mb-6">
             You're now registered for event safety alerts. You'll receive important notifications via text or phone call when needed.
@@ -133,7 +143,9 @@ export default function UserRegistrationPage() {
           <Button
             onClick={() => setSuccess(false)}
             variant="primary"
+            className="w-full"
           >
+            <Star className="h-4 w-4 mr-2" />
             Register Another User
           </Button>
         </Card>
@@ -142,23 +154,36 @@ export default function UserRegistrationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen relative overflow-hidden py-8">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-pink-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+      </div>
+
+      <div className="relative z-10 max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Event Safety Registration
-          </h1>
-          <p className="text-gray-600">
+          <div className="relative inline-block">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 floating">
+              Event Safety Registration
+            </h1>
+            <div className="absolute -inset-1 bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 rounded-lg blur opacity-30"></div>
+          </div>
+          <p className="text-xl text-white/90">
             Register to receive personalized safety alerts during the event
           </p>
         </div>
 
-        <Card>
+        <Card className="rainbow-border">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Basic Information */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-gray-900 flex items-center">
-                <User className="h-5 w-5 mr-2 text-primary-600" />
+                <div className="relative">
+                  <User className="h-5 w-5 mr-2 text-indigo-600" />
+                  <Sparkles className="h-3 w-3 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
+                </div>
                 Basic Information
               </h3>
               
@@ -196,7 +221,10 @@ export default function UserRegistrationPage() {
             {/* Medical Information */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-gray-900 flex items-center">
-                <Heart className="h-5 w-5 mr-2 text-danger-600" />
+                <div className="relative">
+                  <Heart className="h-5 w-5 mr-2 text-pink-600" />
+                  <Zap className="h-3 w-3 text-red-400 absolute -top-1 -right-1 animate-pulse" />
+                </div>
                 Medical Information
               </h3>
               
@@ -222,7 +250,10 @@ export default function UserRegistrationPage() {
             {/* ID Verification */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-gray-900 flex items-center">
-                <Shield className="h-5 w-5 mr-2 text-warning-600" />
+                <div className="relative">
+                  <Shield className="h-5 w-5 mr-2 text-orange-600" />
+                  <Star className="h-3 w-3 text-yellow-400 absolute -top-1 -right-1 animate-bounce" />
+                </div>
                 Identity Verification
               </h3>
               
@@ -236,14 +267,17 @@ export default function UserRegistrationPage() {
             </div>
 
             {/* Privacy Notice */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-6">
               <div className="flex">
                 <div className="flex-shrink-0">
-                  <Shield className="h-5 w-5 text-blue-400" />
+                  <div className="relative">
+                    <Shield className="h-6 w-6 text-blue-500" />
+                    <Sparkles className="h-4 w-4 text-purple-400 absolute -top-1 -right-1 animate-pulse" />
+                  </div>
                 </div>
                 <div className="ml-3">
                   <h4 className="text-sm font-medium text-blue-800">
-                    Privacy & Security
+                    Privacy & Security ✨
                   </h4>
                   <p className="text-sm text-blue-700 mt-1">
                     Your information is encrypted and stored securely. We only use this data to provide 
@@ -261,8 +295,10 @@ export default function UserRegistrationPage() {
                 size="lg"
                 loading={loading}
                 disabled={!formData.name.trim() || !formData.phoneNumber.trim()}
+                className="pulse-glow"
               >
                 <User className="h-4 w-4 mr-2" />
+                <Sparkles className="h-4 w-4 mr-2" />
                 Complete Registration
               </Button>
             </div>
@@ -270,26 +306,29 @@ export default function UserRegistrationPage() {
         </Card>
 
         {/* Additional Information */}
-        <Card className="mt-6">
+        <Card className="mt-6 rainbow-border">
           <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center">
-            <FileText className="h-5 w-5 mr-2 text-gray-600" />
+            <div className="relative">
+              <FileText className="h-5 w-5 mr-2 text-indigo-600" />
+              <Zap className="h-3 w-3 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
+            </div>
             How It Works
           </h3>
           <div className="space-y-3 text-sm text-gray-600">
             <div className="flex items-start">
-              <div className="flex-shrink-0 w-6 h-6 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xs font-medium mr-3 mt-0.5">
+              <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full flex items-center justify-center text-xs font-medium mr-3 mt-0.5">
                 1
               </div>
               <p>Register with your contact information and any relevant medical conditions.</p>
             </div>
             <div className="flex items-start">
-              <div className="flex-shrink-0 w-6 h-6 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xs font-medium mr-3 mt-0.5">
+              <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-full flex items-center justify-center text-xs font-medium mr-3 mt-0.5">
                 2
               </div>
               <p>Receive personalized safety alerts via text message or phone call during the event.</p>
             </div>
             <div className="flex items-start">
-              <div className="flex-shrink-0 w-6 h-6 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-xs font-medium mr-3 mt-0.5">
+              <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-full flex items-center justify-center text-xs font-medium mr-3 mt-0.5">
                 3
               </div>
               <p>Ask questions and get real-time assistance from our AI safety assistant.</p>
