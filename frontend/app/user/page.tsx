@@ -304,24 +304,36 @@ export default function UserRegistrationPage() {
           </p>
           
           {/* GPS Status Indicator */}
-          <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white/10 backdrop-blur-sm border border-white/20">
-            <MapPin className={`h-4 w-4 mr-2 ${
-              gpsError ? 'text-red-400' : 
-              latitude !== null ? 'text-green-400' : 'text-yellow-400'
-            }`} />
-            <span className="text-white">
-              {gpsError ? 'Location Access Denied' :
-               latitude !== null ? `Location: ${latitude.toFixed(4)}, ${longitude?.toFixed(4)}` :
-               'Getting Location...'}
-              {registeredUserId && latitude !== null && (
-                <span className="ml-2 text-green-400">📡 Tracking</span>
-              )}
-            </span>
-            {latitude !== null && accuracy && (
-              <span className="ml-2 text-white/70 text-xs">
-                ±{Math.round(accuracy)}m
+          <div className="inline-flex items-center gap-2">
+            <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white/10 backdrop-blur-sm border border-white/20">
+              <MapPin className={`h-4 w-4 mr-2 ${
+                gpsError ? 'text-red-400' : 
+                latitude !== null ? 'text-green-400' : 'text-yellow-400'
+              }`} />
+              <span className="text-white">
+                {gpsError ? 'Location Access Denied' :
+                 latitude !== null ? `Location: ${latitude.toFixed(4)}, ${longitude?.toFixed(4)}` :
+                 'Getting Location...'}
+                {registeredUserId && latitude !== null && (
+                  <span className="ml-2 text-green-400">📡 Tracking</span>
+                )}
               </span>
-            )}
+              {latitude !== null && accuracy && (
+                <span className="ml-2 text-white/70 text-xs">
+                  ±{Math.round(accuracy)}m
+                </span>
+              )}
+            </div>
+            
+            {/* Refresh Location Button */}
+            <button
+              onClick={refreshGPS}
+              disabled={gpsLoading}
+              className="px-3 py-2 rounded-full text-sm font-medium bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Refresh location"
+            >
+              <span className={`${gpsLoading ? 'animate-spin' : ''}`}>🔄</span>
+            </button>
           </div>
         </div>
 
