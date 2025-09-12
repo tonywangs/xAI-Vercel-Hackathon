@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       error += data.toString();
     });
 
-    return new Promise((resolve) => {
+    return new Promise<Response>((resolve) => {
       pythonProcess.on('close', async (code) => {
         // Clean up temporary file
         try {

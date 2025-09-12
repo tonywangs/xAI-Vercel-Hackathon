@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { MapPin, Users, Wifi, WifiOff, RefreshCw, AlertCircle } from 'lucide-react';
 import Card from '@/components/ui/Card';
@@ -43,7 +43,7 @@ export default function UserMapView() {
     if (map) {
       updateMarkers();
     }
-  }, [map, users]);
+  }, [map, users, updateMarkers]);
 
   const fetchUserLocations = async () => {
     try {
@@ -109,7 +109,7 @@ export default function UserMapView() {
     }
   };
 
-  const updateMarkers = async () => {
+  const updateMarkers = useCallback(async () => {
     if (!map) return;
 
     // Clear existing markers
@@ -152,7 +152,7 @@ export default function UserMapView() {
     } catch (error) {
       console.error('Error creating markers:', error);
     }
-  };
+  }, [map, users, markers]);
 
   const onlineUsers = users.filter(u => u.status === 'online');
   const usersWithMedical = users.filter(u => (u as any).medical_information);
