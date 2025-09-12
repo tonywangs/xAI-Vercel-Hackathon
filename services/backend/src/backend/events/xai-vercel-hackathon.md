@@ -26,7 +26,7 @@
 - **Main Station**: 1st floor central area
 - **Drinks Refrigerator**: Near main entrance (landmark for bathroom directions)
 - **Meal Times**: 
-  - Dinner: 7:00 PM until gone
+  - Dinner: 7:00 PM until gone. Dinner is Pizza and there are Vegan options.
   - Snacks and drinks: Available 24/7
 
 ## Emergency Information
@@ -87,8 +87,8 @@
 ## Technical Support
 
 ### WiFi
-- **Network**: HackathonGuest
-- **Password**: xAIVercel2024
+- **Network**: Colossus Guest
+- **Password**: Welcome2Pioneer
 - **Issues**: Contact tech support at registration desk
 
 ### Power & Equipment
@@ -101,39 +101,6 @@
 - **Vercel Credits**: Available through event portal
 - **Documentation**: QR codes posted around venue
 
-## Event Schedule
-
-### Key Timestamps
-- **Friday 6:00 PM**: Registration opens
-- **Friday 8:00 PM**: Opening ceremony & team formation
-- **Friday 9:00 PM**: Hacking begins
-- **Saturday 8:00 PM**: Project submissions due
-- **Sunday 10:00 AM**: Presentations begin
-- **Sunday 2:00 PM**: Awards ceremony
-
-### Workshops
-- **Saturday 10:00 AM**: "Building with xAI APIs"
-- **Saturday 2:00 PM**: "Deploying on Vercel"
-- **Saturday 6:00 PM**: "Demo Day Preparation"
-
-## Judging & Submissions
-
-### Submission Requirements
-- **Deadline**: Saturday 8:00 PM sharp
-- **Platform**: Submit via event portal (link at registration)
-- **Demo**: 3-minute video + live demo during presentations
-
-### Judging Criteria
-- **Innovation** (25%): Creative use of xAI and Vercel
-- **Technical Achievement** (25%): Code quality and implementation
-- **Impact** (25%): Real-world applicability
-- **Presentation** (25%): Communication and demo quality
-
-## Prizes
-- **1st Place**: $5,000 + xAI API credits
-- **2nd Place**: $3,000 + Vercel Pro plans
-- **3rd Place**: $1,000 + swag bundles
-- **Special Categories**: Best AI Integration, Best Vercel Deployment
 
 ## Common Questions
 
@@ -160,8 +127,3 @@
 - Presentations in main area (1st floor)
 - Setup time: 5 minutes before your slot
 - AV equipment: HDMI, USB-C adapters available
-
-### "Lost my badge?"
-- Report to registration immediately
-- Replacement fee: $25
-- Temporary pass available while replacement is made
