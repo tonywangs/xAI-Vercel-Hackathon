@@ -5,13 +5,14 @@
 - **Date**: September 11, 2025
 - **Duration**: 3 hours
 - **Location**: xAI Office
+- **Prizes**: 1 Overall top winner, 1 Vibe Builder Prize, 1 Interface Paradigm Prize. The overall top winner gets keyboards, the rest get lots of free credits. 
 
 ## Facilities & Navigation
 
 ### Bathrooms
-- **Location**: Left of the entrance
-- **How to find**: When you enter the building, turn into the hallway that is before the drinks refrigerator.
-- **Available**: 24/7 during the event
+- **Location**: Left of the front entrance
+- **How to find**: When you enter the building, turn into the hallway that is before the drinks refrigerator. Both the men's and women's bathrooms are there. 
+- **Available**: During the entire event. 
 
 ### Floor Access
 - **1st Floor**: Fully available for all participants
@@ -20,7 +21,6 @@
   - Food & beverage stations
   - Registration desk
 - **2nd Floor**: RESTRICTED - No participant access
-- **3rd Floor**: RESTRICTED - No participant access
 
 ### Food & Beverages
 - **Main Station**: 1st floor central area
@@ -104,26 +104,29 @@
 
 ## Common Questions
 
+### What is the dinner situation? 
+- We will have pizza at 7:00 PM. The pizza will be right outside the front door. There will be vegan options, along with napkins and paper plates. 
+
 ### "Where can I sleep?"
-- Quiet zone designated in northeast corner of 1st floor
-- Bring sleeping bags/pillows
-- Lights dimmed in sleep area after 11 PM
+- This is not an overnight hackathon, so there is no need for a sleeping zone. 
+- The upper floors may be more quiet, but hackers should not go there without organizer permission. 
+- Users do not need to bring sleeping bags/pillows
+- The lights will not be dimmed in the building, and the hacking portion will end at 9 PM. 
 
 ### "Can I leave and come back?"
-- Yes, building access 24/7 with badge
-- Must check out/in with security after hours
+- Yes, but there is security and hackers must keep their yellow wristband on at all times. 
+- Must check out/in with security at all times
 
 ### "What if I don't have a team?"
-- Team formation session Friday 8:00 PM
-- Post on event Slack #team-formation
+- Team formation session will happen at the very start, so make sure to arrive on time. 
+- Post on the Partiful to find teammates. 
 - Solo participation allowed
 
 ### "Internet not working?"
-- Try guest network: HackathonBackup / password: Backup2024
-- Ethernet cables available at registration
-- Mobile hotspot reimbursement available for critical issues
+- Try guest network: Colossus Guest / password: Welcome2Pioneer
+- Ethernet cables may be available at registration
 
 ### "Where do I present?"
-- Presentations in main area (1st floor)
+- Presentations in main area (1st floor) where the opening ceremony was
 - Setup time: 5 minutes before your slot
 - AV equipment: HDMI, USB-C adapters available
