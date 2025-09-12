@@ -1,13 +1,14 @@
 'use client';
 
-import { useState } from 'react';
-import { User, Phone, Heart, FileText, Shield, CheckCircle, Sparkles, Zap, Star, AlertTriangle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { User, Phone, Heart, FileText, Shield, CheckCircle, Sparkles, Zap, Star, AlertTriangle, MapPin } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
 import FileUpload from '@/components/ui/FileUpload';
 import { UserRegistration, IDProcessingResponse } from '@/types/api';
+import { useGeolocation } from '@/hooks/useGeolocation';
 
 export default function UserRegistrationPage() {
   const [formData, setFormData] = useState<UserRegistration>({
@@ -24,6 +25,43 @@ export default function UserRegistrationPage() {
   const [successMessage, setSuccessMessage] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [processingId, setProcessingId] = useState(false);
+
+  // GPS location tracking
+  const { latitude, longitude, accuracy, error: gpsError, loading: gpsLoading, refresh: refreshGPS } = useGeolocation({
+    enableHighAccuracy: true,
+    timeout: 15000,
+    maximumAge: 60000, // 1 minute cache
+  });
+
+  // Log GPS coordinates every minute
+  useEffect(() => {
+    const logGPSLocation = () => {
+      if (latitude !== null && longitude !== null) {
+        console.log('📍 GPS Location Update:', {
+          timestamp: new Date().toISOString(),
+          latitude: latitude,
+          longitude: longitude,
+          accuracy: accuracy ? `${Math.round(accuracy)}m` : 'unknown',
+          coordinates: `${latitude}, ${longitude}`
+        });
+      } else if (gpsError) {
+        console.log('❌ GPS Error:', gpsError);
+      } else {
+        console.log('🔍 GPS Loading...');
+      }
+    };
+
+    // Log immediately on first load
+    logGPSLocation();
+
+    // Set up interval to log every minute (60000ms)
+    const intervalId = setInterval(() => {
+      refreshGPS(); // Refresh GPS position
+      logGPSLocation();
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [latitude, longitude, accuracy, gpsError, refreshGPS]);
 
   const processIdImage = async (file: File) => {
     setProcessingId(true);
