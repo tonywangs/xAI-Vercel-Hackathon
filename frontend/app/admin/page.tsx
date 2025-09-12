@@ -6,8 +6,9 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import UserList from '@/components/admin/UserList';
 import UserMapView from '@/components/admin/UserMapView';
+import AlertForm from '@/components/admin/AlertForm';
 
-type ActiveTab = 'overview' | 'users' | 'map';
+type ActiveTab = 'overview' | 'users' | 'map' | 'alerts';
 
 interface UserStats {
   totalUsers: number;
@@ -61,6 +62,7 @@ export default function AdminPage() {
     { id: 'overview' as const, label: 'Overview', icon: Shield },
     { id: 'users' as const, label: 'User List', icon: Users },
     { id: 'map' as const, label: 'Map View', icon: Map },
+    { id: 'alerts' as const, label: 'Send Alert', icon: AlertTriangle },
   ];
 
   return (
@@ -210,6 +212,8 @@ export default function AdminPage() {
           {activeTab === 'users' && <UserList />}
 
           {activeTab === 'map' && <UserMapView />}
+
+          {activeTab === 'alerts' && <AlertForm />}
         </div>
       </div>
     </div>

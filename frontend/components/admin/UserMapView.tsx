@@ -139,11 +139,12 @@ export default function UserMapView() {
           title: user.user_name,
         });
 
-        // Add click listener
-        marker.addListener('click', () => {
-          setSelectedUser(user);
-          map.panTo({ lat: user.latitude, lng: user.longitude });
-        });
+        // Add click listener with proper closure
+        marker.addListener('click', ((currentUser) => () => {
+          console.log('Marker clicked for user:', currentUser.user_name, currentUser.user_id);
+          setSelectedUser(currentUser);
+          map.panTo({ lat: currentUser.latitude, lng: currentUser.longitude });
+        })(user));
 
         newMarkers.push(marker as any);
       });

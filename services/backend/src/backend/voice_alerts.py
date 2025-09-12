@@ -31,19 +31,27 @@ class VoiceAlertService:
 
         successful_calls = 0
 
+        print("here")
         async with httpx.AsyncClient() as client:
             for phone_number in phone_numbers:
+                print(f"Calling {phone_number}...")
                 try:
                     call_payload = {
                         "phoneNumberId": os.getenv("VAPI_PHONE_NUMBER_ID"),
                         "customer": {"number": phone_number},
                         "assistant": {
                             "firstMessage": alert_message,
-                            "systemMessage": assistant_context,
                             "model": {
-                                "provider": "openai",
-                                "model": "gpt-4",
+                                "provider": "xai",
+                                "model": "grok-3",
                                 "temperature": 0.1,
+                                "messages": [
+                                    {"role": "system", "content": assistant_context},
+                                    {
+                                        "role": "user",
+                                        "content": alert_message,
+                                    },
+                                ],
                             },
                             "voice": {"provider": "11labs", "voiceId": "burt"},
                         },
