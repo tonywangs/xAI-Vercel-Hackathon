@@ -7,7 +7,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Textarea from '@/components/ui/Textarea';
 import FileUpload from '@/components/ui/FileUpload';
-import { UserRegistration } from '@/types/api';
+import { UserRegistration, IDProcessingResponse } from '@/types/api';
 
 export default function UserRegistrationPage() {
   const [formData, setFormData] = useState<UserRegistration>({
@@ -16,11 +16,46 @@ export default function UserRegistrationPage() {
     medicalInfo: '',
     emergencyContact: '',
     age: undefined,
+    gender: '',
   });
   const [idScan, setIdScan] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [processingId, setProcessingId] = useState(false);
+
+  const processIdImage = async (file: File) => {
+    setProcessingId(true);
+    try {
+      const formData = new FormData();
+      formData.append('idImage', file);
+
+      const response = await fetch('/api/process-id', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result: IDProcessingResponse = await response.json();
+
+      if (result.success && result.data) {
+        // Update form with extracted data
+        setFormData(prev => ({
+          ...prev,
+          name: result.data?.fullName || prev.name,
+          age: result.data?.age || prev.age,
+          gender: result.data?.gender || prev.gender,
+        }));
+      } else {
+        console.error('ID processing failed:', result.error);
+        // Don't show error to user, just silently fail
+      }
+    } catch (error) {
+      console.error('Error processing ID:', error);
+      // Don't show error to user, just silently fail
+    } finally {
+      setProcessingId(false);
+    }
+  };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -89,6 +124,7 @@ export default function UserRegistrationPage() {
           medicalInfo: '',
           emergencyContact: '',
           age: undefined,
+          gender: '',
         });
         setIdScan(null);
       } else {
@@ -114,6 +150,13 @@ export default function UserRegistrationPage() {
         ...prev,
         [field]: '',
       }));
+    }
+  };
+
+  const handleIdUpload = (file: File | null) => {
+    setIdScan(file);
+    if (file) {
+      processIdImage(file);
     }
   };
 
@@ -207,15 +250,24 @@ export default function UserRegistrationPage() {
                 />
               </div>
 
-              <Input
-                label="Age (Optional)"
-                type="number"
-                placeholder="25"
-                value={formData.age || ''}
-                onChange={(e) => updateFormData('age', e.target.value ? parseInt(e.target.value) : undefined)}
-                error={errors.age}
-                helperText="Helps us provide age-appropriate safety information"
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  label="Age (Optional)"
+                  type="number"
+                  placeholder="25"
+                  value={formData.age || ''}
+                  onChange={(e) => updateFormData('age', e.target.value ? parseInt(e.target.value) : undefined)}
+                  error={errors.age}
+                  helperText="Helps us provide age-appropriate safety information"
+                />
+                <Input
+                  label="Gender (Optional)"
+                  placeholder="Male/Female/Other"
+                  value={formData.gender || ''}
+                  onChange={(e) => updateFormData('gender', e.target.value)}
+                  helperText="Will be auto-filled from ID if available"
+                />
+              </div>
             </div>
 
             {/* Medical Information */}
@@ -261,9 +313,16 @@ export default function UserRegistrationPage() {
                 label="ID Scan (Optional)"
                 accept="image/*,.pdf"
                 maxSize={5}
-                onFileChange={setIdScan}
-                helperText="Upload a scan of your ID for verification. Accepted formats: JPG, PNG, PDF (max 5MB)"
+                onFileChange={handleIdUpload}
+                helperText="Upload a scan of your ID for verification. Accepted formats: JPG, PNG, PDF (max 5MB). Form will auto-fill from ID data."
               />
+              
+              {processingId && (
+                <div className="flex items-center text-sm text-blue-600 mt-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                  Processing ID image...
+                </div>
+              )}
             </div>
 
             {/* Privacy Notice */}

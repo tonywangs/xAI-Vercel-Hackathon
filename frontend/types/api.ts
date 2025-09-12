@@ -6,6 +6,7 @@ export interface UserRegistration {
   idScan?: File;
   emergencyContact?: string;
   age?: number;
+  gender?: string;
   location?: {
     latitude: number;
     longitude: number;
@@ -16,6 +17,19 @@ export interface UserRegistrationResponse {
   success: boolean;
   userId?: string;
   message?: string;
+}
+
+export interface IDProcessingResponse {
+  success: boolean;
+  data?: {
+    firstName?: string;
+    lastName?: string;
+    fullName?: string;
+    gender?: string;
+    birthday?: string;
+    age?: number;
+  };
+  error?: string;
 }
 
 // Alert types
