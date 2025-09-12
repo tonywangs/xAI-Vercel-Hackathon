@@ -166,7 +166,7 @@ export default function AdminPage() {
         )}
 
         <Card className="rainbow-border">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 mx-4 my-4">
             {/* Alert Message */}
             <div>
               <Textarea

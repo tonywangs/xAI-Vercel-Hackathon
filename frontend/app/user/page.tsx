@@ -176,7 +176,7 @@ export default function UserRegistrationPage() {
         </div>
 
         <Card className="rainbow-border">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 mx-4 my-4">
             {/* Basic Information */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-gray-900 flex items-center">

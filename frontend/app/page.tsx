@@ -80,11 +80,11 @@ export default function HomePage() {
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <Card className="text-center rainbow-border floating" style={{ animationDelay: '0s' }}>
+          <Card className="text-center rainbow-border">
             <div className="flex justify-center mb-4">
               <div className="relative">
-                <MessageSquare className="h-12 w-12 text-indigo-600" />
-                <Zap className="h-6 w-6 text-yellow-400 absolute -top-1 -right-1 animate-bounce" />
+                <MessageSquare className="h-8 w-8 text-indigo-600" />
+                <Zap className="h-4 w-4 text-yellow-400 absolute -top-1 -right-1 animate-bounce" />
               </div>
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -96,11 +96,11 @@ export default function HomePage() {
             </p>
           </Card>
 
-          <Card className="text-center rainbow-border floating" style={{ animationDelay: '2s' }}>
+          <Card className="text-center rainbow-border">
             <div className="flex justify-center mb-4">
               <div className="relative">
-                <Users className="h-12 w-12 text-pink-600" />
-                <Sparkles className="h-6 w-6 text-purple-400 absolute -top-1 -right-1 animate-pulse" />
+                <Users className="h-8 w-8 text-pink-600" />
+                <Sparkles className="h-4 w-4 text-purple-400 absolute -top-1 -right-1 animate-pulse" />
               </div>
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -112,11 +112,11 @@ export default function HomePage() {
             </p>
           </Card>
 
-          <Card className="text-center rainbow-border floating" style={{ animationDelay: '4s' }}>
+          <Card className="text-center rainbow-border">
             <div className="flex justify-center mb-4">
               <div className="relative">
-                <AlertTriangle className="h-12 w-12 text-orange-600" />
-                <Zap className="h-6 w-6 text-red-400 absolute -top-1 -right-1 animate-ping" />
+                <AlertTriangle className="h-8 w-8 text-orange-600" />
+                <Zap className="h-4 w-4 text-red-400 absolute -top-1 -right-1 animate-ping" />
               </div>
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -133,7 +133,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Card className="text-center rainbow-border pulse-glow">
             <div className="flex justify-center mb-4">
-              <Users className="h-8 w-8 text-indigo-600" />
+              <Users className="h-6 w-6 text-indigo-600" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
               For Event Attendees
@@ -151,7 +151,7 @@ export default function HomePage() {
 
           <Card className="text-center rainbow-border pulse-glow">
             <div className="flex justify-center mb-4">
-              <Shield className="h-8 w-8 text-pink-600" />
+              <Shield className="h-6 w-6 text-pink-600" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
               For Event Organizers
