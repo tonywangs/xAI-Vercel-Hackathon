@@ -25,6 +25,7 @@ export default function UserRegistrationPage() {
   const [successMessage, setSuccessMessage] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [processingId, setProcessingId] = useState(false);
+  const [registeredUserId, setRegisteredUserId] = useState<string | null>(null);
 
   // GPS location tracking
   const { latitude, longitude, accuracy, error: gpsError, loading: gpsLoading, refresh: refreshGPS } = useGeolocation({
@@ -33,17 +34,55 @@ export default function UserRegistrationPage() {
     maximumAge: 60000, // 1 minute cache
   });
 
-  // Log GPS coordinates every minute
+  // Send GPS coordinates to backend
+  const sendLocationToBackend = async (lat: number, lng: number, acc?: number) => {
+    if (!registeredUserId) {
+      console.log('🔍 No user ID yet, skipping location update');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/location', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: registeredUserId,
+          latitude: lat,
+          longitude: lng,
+          accuracy: acc,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        console.log('✅ Location sent to backend:', result.message);
+      } else {
+        console.error('❌ Failed to send location:', result.message);
+      }
+    } catch (error) {
+      console.error('❌ Location update error:', error);
+    }
+  };
+
+  // Log GPS coordinates and send to backend every minute
   useEffect(() => {
-    const logGPSLocation = () => {
+    const handleGPSUpdate = async () => {
       if (latitude !== null && longitude !== null) {
         console.log('📍 GPS Location Update:', {
           timestamp: new Date().toISOString(),
           latitude: latitude,
           longitude: longitude,
           accuracy: accuracy ? `${Math.round(accuracy)}m` : 'unknown',
-          coordinates: `${latitude}, ${longitude}`
+          coordinates: `${latitude}, ${longitude}`,
+          userId: registeredUserId || 'not-registered'
         });
+        
+        // Send to backend if user is registered
+        if (registeredUserId) {
+          await sendLocationToBackend(latitude, longitude, accuracy);
+        }
       } else if (gpsError) {
         console.log('❌ GPS Error:', gpsError);
       } else {
@@ -51,17 +90,17 @@ export default function UserRegistrationPage() {
       }
     };
 
-    // Log immediately on first load
-    logGPSLocation();
+    // Handle immediately on first load
+    handleGPSUpdate();
 
-    // Set up interval to log every minute (60000ms)
+    // Set up interval to update every second (1000ms) as per user change
     const intervalId = setInterval(() => {
       refreshGPS(); // Refresh GPS position
-      logGPSLocation();
-    }, 60000);
+      setTimeout(handleGPSUpdate, 100); // Small delay to ensure GPS is updated
+    }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [latitude, longitude, accuracy, gpsError, refreshGPS]);
+  }, [latitude, longitude, accuracy, gpsError, registeredUserId, refreshGPS]);
 
   const processIdImage = async (file: File) => {
     setProcessingId(true);
@@ -161,6 +200,7 @@ export default function UserRegistrationPage() {
       if (response.ok && result.success) {
         setSuccess(true);
         setSuccessMessage(result.message || 'Registration successful!');
+        setRegisteredUserId(result.userId); // Store user ID for location tracking
         setFormData({
           phoneNumber: '',
           name: '',
@@ -273,6 +313,9 @@ export default function UserRegistrationPage() {
               {gpsError ? 'Location Access Denied' :
                latitude !== null ? `Location: ${latitude.toFixed(4)}, ${longitude?.toFixed(4)}` :
                'Getting Location...'}
+              {registeredUserId && latitude !== null && (
+                <span className="ml-2 text-green-400">📡 Tracking</span>
+              )}
             </span>
             {latitude !== null && accuracy && (
               <span className="ml-2 text-white/70 text-xs">

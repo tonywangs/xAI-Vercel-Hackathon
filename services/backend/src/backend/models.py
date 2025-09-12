@@ -38,3 +38,23 @@ class AlertResponse(BaseModel):
     success: bool
     message: str
     recipients_contacted: int
+
+class LocationUpdate(BaseModel):
+    user_id: str = Field(..., description="ID of the registered user")
+    latitude: float = Field(..., ge=-90, le=90, description="Latitude coordinate")
+    longitude: float = Field(..., ge=-180, le=180, description="Longitude coordinate")
+    accuracy: Optional[float] = Field(None, ge=0, description="GPS accuracy in meters")
+
+class UserLocation(BaseModel):
+    user_id: str
+    user_name: str
+    phone_number: str
+    latitude: float
+    longitude: float
+    accuracy: Optional[float]
+    last_updated: datetime
+    status: Literal["online", "offline"] = "online"
+
+class LocationResponse(BaseModel):
+    success: bool
+    message: str

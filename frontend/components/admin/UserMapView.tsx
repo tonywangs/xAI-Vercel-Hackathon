@@ -2,82 +2,41 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
-import { MapPin, Users, Wifi, WifiOff } from 'lucide-react';
+import { MapPin, Users, Wifi, WifiOff, RefreshCw, AlertCircle } from 'lucide-react';
 import Card from '@/components/ui/Card';
 
 interface UserLocation {
-  id: string;
-  full_name: string;
+  user_id: string;
+  user_name: string;
   phone_number: string;
   latitude: number;
   longitude: number;
-  medical_information?: string;
+  accuracy?: number;
   last_updated: string;
   status: 'online' | 'offline';
 }
 
-// Mock GPS data for demonstration - replace with actual API later
-const mockUserLocations: UserLocation[] = [
-  {
-    id: '1',
-    full_name: 'Alice Johnson',
-    phone_number: '+1555123456',
-    latitude: 37.7749,
-    longitude: -122.4194,
-    medical_information: 'Diabetic - insulin dependent',
-    last_updated: '2 min ago',
-    status: 'online'
-  },
-  {
-    id: '2', 
-    full_name: 'Bob Smith',
-    phone_number: '+1555987654',
-    latitude: 37.7849,
-    longitude: -122.4094,
-    last_updated: '5 min ago',
-    status: 'online'
-  },
-  {
-    id: '3',
-    full_name: 'Carol Davis',
-    phone_number: '+1555456789',
-    latitude: 37.7649,
-    longitude: -122.4294,
-    medical_information: 'Asthma - carries inhaler',
-    last_updated: '1 min ago',
-    status: 'online'
-  },
-  {
-    id: '4',
-    full_name: 'David Wilson',
-    phone_number: '+1555321654',
-    latitude: 37.7949,
-    longitude: -122.3994,
-    last_updated: '15 min ago',
-    status: 'offline'
-  },
-  {
-    id: '5',
-    full_name: 'Emma Brown',
-    phone_number: '+1555789012',
-    latitude: 37.7549,
-    longitude: -122.4394,
-    medical_information: 'Heart condition',
-    last_updated: '3 min ago',
-    status: 'online'
-  }
-];
+interface LocationsResponse {
+  total_locations: number;
+  locations: UserLocation[];
+}
 
 export default function UserMapView() {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
-  const [users, setUsers] = useState<UserLocation[]>(mockUserLocations);
+  const [users, setUsers] = useState<UserLocation[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState<UserLocation | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     initializeMap();
+    fetchUserLocations();
+    
+    // Set up auto-refresh every 30 seconds
+    const intervalId = setInterval(fetchUserLocations, 30000);
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -85,6 +44,43 @@ export default function UserMapView() {
       updateMarkers();
     }
   }, [map, users]);
+
+  const fetchUserLocations = async () => {
+    try {
+      // Fetch both locations and users data to get medical information
+      const [locationsResponse, usersResponse] = await Promise.all([
+        fetch('/api/locations'),
+        fetch('/api/users')
+      ]);
+
+      if (!locationsResponse.ok || !usersResponse.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const locationsData: LocationsResponse = await locationsResponse.json();
+      const usersData = await usersResponse.json();
+
+      // Create a map of user medical information
+      const userMedicalInfo: Record<string, string> = {};
+      usersData.users.forEach((user: any) => {
+        if (user.medical_information) {
+          userMedicalInfo[user.id] = user.medical_information;
+        }
+      });
+
+      // Enhance location data with medical information
+      const enhancedLocations = locationsData.locations.map(location => ({
+        ...location,
+        medical_information: userMedicalInfo[location.user_id]
+      }));
+
+      setUsers(enhancedLocations);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching locations:', err);
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    }
+  };
 
   const initializeMap = async () => {
     if (!mapRef.current) return;
@@ -127,7 +123,7 @@ export default function UserMapView() {
       users.forEach(user => {
         // Create custom pin based on user status and medical info
         const pinColor = user.status === 'online' ? '#10B981' : '#6B7280'; // Green for online, gray for offline
-        const hasMedical = !!user.medical_information;
+        const hasMedical = !!(user as any).medical_information;
         
         const pinElement = new PinElement({
           background: pinColor,
@@ -140,7 +136,7 @@ export default function UserMapView() {
           map,
           position: { lat: user.latitude, lng: user.longitude },
           content: pinElement.element,
-          title: user.full_name,
+          title: user.user_name,
         });
 
         // Add click listener
@@ -159,10 +155,29 @@ export default function UserMapView() {
   };
 
   const onlineUsers = users.filter(u => u.status === 'online');
-  const usersWithMedical = users.filter(u => u.medical_information);
+  const usersWithMedical = users.filter(u => (u as any).medical_information);
 
   return (
     <div className="space-y-6">
+      {/* Error Display */}
+      {error && (
+        <Card className="p-4 bg-red-50 border-red-200">
+          <div className="flex items-center">
+            <AlertCircle className="h-5 w-5 text-red-600 mr-2" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-red-800">Error loading locations</p>
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+            <button
+              onClick={fetchUserLocations}
+              className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Retry
+            </button>
+          </div>
+        </Card>
+      )}
+
       {/* Stats Bar */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="p-4">
@@ -220,15 +235,24 @@ export default function UserMapView() {
         {/* User Details Panel */}
         <div className="space-y-4">
           <Card className="p-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <MapPin className="h-5 w-5 mr-2" />
-              Live Locations
-            </h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                <MapPin className="h-5 w-5 mr-2" />
+                Live Locations
+              </h3>
+              <button
+                onClick={fetchUserLocations}
+                className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded"
+                title="Refresh locations"
+              >
+                <RefreshCw className="h-4 w-4" />
+              </button>
+            </div>
             
             {selectedUser ? (
               <div className="space-y-3">
                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <h4 className="font-semibold text-blue-900">{selectedUser.full_name}</h4>
+                  <h4 className="font-semibold text-blue-900">{selectedUser.user_name}</h4>
                   <p className="text-sm text-blue-700">{selectedUser.phone_number}</p>
                   <div className="flex items-center mt-2">
                     {selectedUser.status === 'online' ? (
@@ -237,14 +261,20 @@ export default function UserMapView() {
                       <WifiOff className="h-4 w-4 text-gray-600 mr-1" />
                     )}
                     <span className="text-xs text-gray-600">
-                      {selectedUser.status} • {selectedUser.last_updated}
+                      {selectedUser.status} • {new Date(selectedUser.last_updated).toLocaleString()}
                     </span>
                   </div>
                   
-                  {selectedUser.medical_information && (
+                  {selectedUser.accuracy && (
+                    <div className="mt-2 text-xs text-gray-600">
+                      Accuracy: ±{Math.round(selectedUser.accuracy)}m
+                    </div>
+                  )}
+                  
+                  {(selectedUser as any).medical_information && (
                     <div className="mt-3 p-2 bg-red-50 border border-red-200 rounded">
                       <p className="text-xs font-medium text-red-800">Medical:</p>
-                      <p className="text-xs text-red-700">{selectedUser.medical_information}</p>
+                      <p className="text-xs text-red-700">{(selectedUser as any).medical_information}</p>
                     </div>
                   )}
                 </div>

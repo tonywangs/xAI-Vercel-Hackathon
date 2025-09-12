@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from .models import AlertRequest, AlertResponse, UserRegistration, RegisteredUser, RegistrationResponse
+from .models import AlertRequest, AlertResponse, UserRegistration, RegisteredUser, RegistrationResponse, LocationUpdate, UserLocation, LocationResponse
 from .voice_alerts import VoiceAlertService
 
 load_dotenv()
@@ -25,6 +25,9 @@ app.add_middleware(
 
 # In-memory user storage
 registered_users: Dict[str, RegisteredUser] = {}
+
+# In-memory location storage
+user_locations: Dict[str, UserLocation] = {}
 
 # Configuration - keep existing hardcoded numbers for backward compatibility
 HARDCODED_PHONE_NUMBERS = [
@@ -148,3 +151,71 @@ async def send_alert(alert: AlertRequest):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to send alert: {str(e)}")
+
+@app.post("/location", response_model=LocationResponse)
+async def update_user_location(location: LocationUpdate):
+    """
+    Update a user's GPS location
+    """
+    try:
+        # Check if user exists
+        if location.user_id not in registered_users:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        user = registered_users[location.user_id]
+        
+        # Create or update location record
+        user_location = UserLocation(
+            user_id=location.user_id,
+            user_name=user.full_name,
+            phone_number=user.phone_number,
+            latitude=location.latitude,
+            longitude=location.longitude,
+            accuracy=location.accuracy,
+            last_updated=datetime.utcnow(),
+            status="online"
+        )
+        
+        # Store in memory
+        user_locations[location.user_id] = user_location
+        
+        print(f"📍 Location updated for {user.full_name}: {location.latitude}, {location.longitude}")
+        
+        return LocationResponse(
+            success=True,
+            message=f"Location updated for {user.full_name}"
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to update location: {str(e)}")
+
+@app.get("/locations")
+async def get_all_locations():
+    """
+    Get all user locations for admin dashboard
+    """
+    # Mark users as offline if they haven't updated location in 5 minutes
+    cutoff_time = datetime.utcnow()
+    for location in user_locations.values():
+        time_diff = cutoff_time - location.last_updated
+        if time_diff.total_seconds() > 300:  # 5 minutes
+            location.status = "offline"
+    
+    return {
+        "total_locations": len(user_locations),
+        "locations": [
+            {
+                "user_id": loc.user_id,
+                "user_name": loc.user_name,
+                "phone_number": loc.phone_number,
+                "latitude": loc.latitude,
+                "longitude": loc.longitude,
+                "accuracy": loc.accuracy,
+                "last_updated": loc.last_updated.isoformat(),
+                "status": loc.status
+            }
+            for loc in user_locations.values()
+        ]
+    }
