@@ -1,8 +1,9 @@
 import os
+
 import httpx
-from fastapi import HTTPException
-from .models import AlertRequest, AlertResponse
+
 from .faq_loader import FAQLoader
+from .models import AlertRequest, AlertResponse
 
 
 class VoiceAlertService:
@@ -19,10 +20,12 @@ class VoiceAlertService:
         """Send voice call alerts using VAPI with event-specific FAQ context"""
         # Create base alert message
         alert_message = f"This is an urgent {alert.urgency} alert from your event organizer. {alert.event_name}. {alert.description}. Please follow safety instructions and contact event staff if you need assistance."
-        
+
         # Create comprehensive assistant context with FAQ if available
         if alert.event_slug:
-            assistant_context = self.faq_loader.create_assistant_context(alert.event_slug, alert_message)
+            assistant_context = self.faq_loader.create_assistant_context(
+                alert.event_slug, alert_message
+            )
         else:
             assistant_context = f"{alert_message}\n\nI can help answer basic questions, but for specific event information, please contact event staff."
 
@@ -67,6 +70,6 @@ class VoiceAlertService:
 
         return AlertResponse(
             success=successful_calls > 0,
-            message=f"Voice call alerts initiated successfully",
+            message="Voice call alerts initiated successfully",
             recipients_contacted=successful_calls,
         )
