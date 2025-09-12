@@ -2,9 +2,9 @@
 
 ## Event Information
 - **Event**: xAI x Vercel Hackathon
-- **Date**: TBD
-- **Duration**: 48 hours
-- **Location**: Innovation Hub, Building A
+- **Date**: September 11, 2025
+- **Duration**: 3 hours
+- **Location**: xAI Office
 
 ## Facilities & Navigation
 
@@ -26,10 +26,8 @@
 - **Main Station**: 1st floor central area
 - **Drinks Refrigerator**: Near main entrance (landmark for bathroom directions)
 - **Meal Times**: 
-  - Breakfast: 8:00 AM - 10:00 AM
-  - Lunch: 12:00 PM - 2:00 PM  
-  - Dinner: 6:00 PM - 8:00 PM
-  - Snacks: Available 24/7
+  - Dinner: 7:00 PM
+  - Snacks and drinks: Available 24/7
 
 ## Emergency Information
 
