@@ -131,4 +131,3 @@
 - Report to registration immediately
 - Replacement fee: $25
 - Temporary pass available while replacement is made
-- 

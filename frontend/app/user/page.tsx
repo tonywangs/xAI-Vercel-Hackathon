@@ -259,9 +259,27 @@ export default function UserRegistrationPage() {
             </h1>
             <div className="absolute -inset-1 bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 rounded-lg blur opacity-30"></div>
           </div>
-          <p className="text-xl text-white/90">
+          <p className="text-xl text-white/90 mb-4">
             Register to receive personalized safety alerts during the event
           </p>
+          
+          {/* GPS Status Indicator */}
+          <div className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white/10 backdrop-blur-sm border border-white/20">
+            <MapPin className={`h-4 w-4 mr-2 ${
+              gpsError ? 'text-red-400' : 
+              latitude !== null ? 'text-green-400' : 'text-yellow-400'
+            }`} />
+            <span className="text-white">
+              {gpsError ? 'Location Access Denied' :
+               latitude !== null ? `Location: ${latitude.toFixed(4)}, ${longitude?.toFixed(4)}` :
+               'Getting Location...'}
+            </span>
+            {latitude !== null && accuracy && (
+              <span className="ml-2 text-white/70 text-xs">
+                ±{Math.round(accuracy)}m
+              </span>
+            )}
+          </div>
         </div>
 
         <Card className="rainbow-border">
